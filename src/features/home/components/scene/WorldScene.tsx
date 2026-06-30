@@ -138,14 +138,16 @@ function ScrollPod() {
 
     const travelDistance = Math.max(window.innerHeight * 1.25, 1);
     const progress = MathUtils.clamp(window.scrollY / travelDistance, 0, 1);
-    const liftProgress = MathUtils.clamp(progress / 0.24, 0, 1);
-    const lifted = liftProgress * liftProgress * (3 - 2 * liftProgress);
-    const travelProgress = MathUtils.clamp((progress - 0.1) / 0.9, 0, 1);
+    const zoomProgress = MathUtils.clamp(progress / 0.2, 0, 1);
+    const zoomed = zoomProgress * zoomProgress * (3 - 2 * zoomProgress);
+    const travelProgress = MathUtils.clamp((progress - 0.18) / 0.82, 0, 1);
     const eased = travelProgress * travelProgress * (3 - 2 * travelProgress);
 
     const targetX = 0;
-    const targetY = MathUtils.lerp(-4.2, 0.35, lifted) + Math.sin(eased * Math.PI * 2.5) * 0.25;
-    const targetZ = MathUtils.lerp(-3, -50, eased);
+    const targetY = 0.2 + Math.sin(eased * Math.PI * 2.5) * 0.25;
+    const zoomZ = MathUtils.lerp(-15, -1.5, zoomed);
+    const targetZ = MathUtils.lerp(zoomZ, -50, eased);
+    const targetScale = MathUtils.lerp(0.08, 1.25, zoomed);
 
     pod.current.position.x = MathUtils.damp(pod.current.position.x, targetX, 2.8, delta);
     pod.current.position.y = MathUtils.damp(
@@ -155,6 +157,8 @@ function ScrollPod() {
       delta,
     );
     pod.current.position.z = MathUtils.damp(pod.current.position.z, targetZ, 2.8, delta);
+    const scale = MathUtils.damp(pod.current.scale.x, targetScale, 4.2, delta);
+    pod.current.scale.setScalar(scale);
     pod.current.rotation.y = MathUtils.damp(
       pod.current.rotation.y,
       Math.PI + MathUtils.lerp(-0.12, 0.12, eased),
@@ -172,9 +176,9 @@ function ScrollPod() {
   return (
     <group
       ref={pod}
-      position={[0, -4.2, -3]}
+      position={[0, 0.2, -15]}
       rotation={[0, Math.PI - 0.12, 0]}
-      scale={1.25}
+      scale={0.08}
     >
       <Pod />
     </group>
