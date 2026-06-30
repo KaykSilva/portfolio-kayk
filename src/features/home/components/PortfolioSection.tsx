@@ -5,7 +5,7 @@ const CHAPTERS = [
     number: "01",
     title: "Projetos",
     text: "Produtos digitais tratados como artefatos: contexto, decisões, arquitetura e resultado.",
-    href: "#projects",
+    href: "/projects",
     status: "Arquivo em construção",
   },
   {

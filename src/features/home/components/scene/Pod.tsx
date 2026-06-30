@@ -15,7 +15,7 @@ export function Pod() {
     if (!pod.current) return;
 
     pod.current.rotation.x = Math.sin(clock.elapsedTime * 0.45) * 0.025;
-    pod.current.rotation.y = Math.sin(clock.elapsedTime * 0.22) * 0.06;
+    pod.current.rotation.y = Math.sin(clock.elapsedTime * 0.22) * 0.90;
     pod.current.rotation.z = Math.sin(clock.elapsedTime * 0.32) * 0.02;
   });
 

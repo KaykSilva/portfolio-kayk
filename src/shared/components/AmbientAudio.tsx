@@ -16,10 +16,7 @@ export function AmbientAudio() {
 
     player.volume = AMBIENT_VOLUME;
     const startPlayback = () => {
-      void player
-        .play()
-        .then(() => setPlaying(true))
-        .catch(() => setPlaying(false));
+      void player.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
     };
 
     startPlayback();
@@ -31,19 +28,13 @@ export function AmbientAudio() {
         shouldResume = !player.paused;
         player.pause();
         setPlaying(false);
-        return;
-      }
-
-      if (shouldResume) {
+      } else if (shouldResume) {
         startPlayback();
         shouldResume = false;
       }
     };
 
-    const stopPlayback = () => {
-      player.pause();
-    };
-
+    const stopPlayback = () => player.pause();
     document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("pagehide", stopPlayback);
 

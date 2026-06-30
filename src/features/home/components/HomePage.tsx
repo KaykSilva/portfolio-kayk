@@ -1,7 +1,7 @@
-import { AmbientAudio } from "./AmbientAudio";
+import { AmbientAudio } from "@/shared/components/AmbientAudio";
+import { SiteHeader } from "@/shared/components/SiteHeader";
 import { HeroSection } from "./HeroSection";
 import { PortfolioSection } from "./PortfolioSection";
-import { SiteHeader } from "./SiteHeader";
 import { WorldSceneClient } from "./scene/WorldSceneClient";
 import styles from "../home.module.css";
 
@@ -18,7 +18,14 @@ export function HomePage() {
       <div className={styles.atmosphere} aria-hidden="true" />
       <div className={styles.grain} aria-hidden="true" />
 
-      <SiteHeader />
+      <SiteHeader
+        brandHref="#home"
+        links={[
+          { href: "#manifesto", label: "Manifesto" },
+          { href: "/projects", label: "Projetos" },
+          { href: "mailto:contato@kayk.dev", label: "Contato" },
+        ]}
+      />
       <AmbientAudio />
 
       <div id="main-content">
