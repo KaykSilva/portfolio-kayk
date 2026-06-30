@@ -7,58 +7,79 @@ const AMBIENT_VOLUME = 0.28;
 
 export function AmbientAudio() {
   const audio = useRef<HTMLAudioElement>(null);
-  const [muted, setMuted] = useState(false);
+  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     const player = audio.current;
     if (!player) return;
+    let shouldResume = false;
 
     player.volume = AMBIENT_VOLUME;
-
-    const play = () => {
-      void player.play().catch(() => {
-        // Autoplay com som pode ser bloqueado até a primeira interação.
-      });
+    const startPlayback = () => {
+      void player
+        .play()
+        .then(() => setPlaying(true))
+        .catch(() => setPlaying(false));
     };
 
-    play();
-    window.addEventListener("pointerdown", play, { once: true });
-    window.addEventListener("keydown", play, { once: true });
+    startPlayback();
+    window.addEventListener("pointerdown", startPlayback, { once: true });
+    window.addEventListener("keydown", startPlayback, { once: true });
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        shouldResume = !player.paused;
+        player.pause();
+        setPlaying(false);
+        return;
+      }
+
+      if (shouldResume) {
+        startPlayback();
+        shouldResume = false;
+      }
+    };
+
+    const stopPlayback = () => {
+      player.pause();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pagehide", stopPlayback);
 
     return () => {
-      window.removeEventListener("pointerdown", play);
-      window.removeEventListener("keydown", play);
+      window.removeEventListener("pointerdown", startPlayback);
+      window.removeEventListener("keydown", startPlayback);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", stopPlayback);
+      stopPlayback();
     };
   }, []);
 
-  const toggleMute = () => {
+  const togglePlayback = () => {
     const player = audio.current;
     if (!player) return;
 
-    const nextMuted = !muted;
-    player.muted = nextMuted;
-    setMuted(nextMuted);
-
-    if (!nextMuted) {
-      void player.play().catch(() => {
-        // O navegador ainda pode exigir uma interação válida para reproduzir.
-      });
+    if (playing) {
+      player.pause();
+      setPlaying(false);
+    } else {
+      void player.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
     }
   };
 
   return (
-    <div className="fixed right-5 top-5 z-50">
-      <audio ref={audio} loop preload="auto" src={AUDIO_SOURCE} />
+    <div className="fixed bottom-6 right-6 z-50">
+      <audio ref={audio} autoPlay loop preload="auto" src={AUDIO_SOURCE} />
       <button
         type="button"
-        aria-label={muted ? "Ativar trilha ambiente" : "Silenciar trilha ambiente"}
-        aria-pressed={muted}
-        className="grid size-10 place-items-center border border-[#5d5848] bg-[#0b0b0a]/80 text-[#d8d2b0] backdrop-blur-sm transition-colors hover:border-[#d8d2b0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d8d2b0]"
-        onClick={toggleMute}
+        aria-label={playing ? "Pausar paisagem sonora" : "Ativar paisagem sonora"}
+        aria-pressed={playing}
+        className="flex h-9 items-center gap-3 border border-white/15 bg-[#0d0d0b]/80 px-3 font-mono text-[9px] uppercase tracking-[0.18em] text-[#d8d2b0] backdrop-blur-sm transition-colors hover:border-white/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d8d2b0]"
+        onClick={togglePlayback}
       >
-        <span aria-hidden="true" className="text-sm">
-          {muted ? "×" : "♪"}
-        </span>
+        <span aria-hidden="true">{playing ? "Ⅱ" : "▷"}</span>
+        <span>{playing ? "Som ativo" : "Ambiente"}</span>
       </button>
     </div>
   );

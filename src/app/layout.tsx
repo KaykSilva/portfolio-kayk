@@ -13,8 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kayk | Web Developer",
-  description: "Portfólio interativo de Kayk, desenvolvedor web.",
+  title: "Kayk — Creative Developer",
+  description: "Engenharia frontend, direção visual e experiências digitais interativas.",
+  icons: {
+    icon: "/emil.ico",
+    shortcut: "/emil.ico",
+  },
 };
 
 export default function RootLayout({

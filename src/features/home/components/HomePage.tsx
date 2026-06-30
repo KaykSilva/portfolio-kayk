@@ -1,21 +1,30 @@
 import { AmbientAudio } from "./AmbientAudio";
-import { ElasticScroll } from "./ElasticScroll";
 import { HeroSection } from "./HeroSection";
 import { PortfolioSection } from "./PortfolioSection";
-import { StarFieldBackground } from "./scene/StarFieldBackground";
+import { SiteHeader } from "./SiteHeader";
+import { WorldSceneClient } from "./scene/WorldSceneClient";
+import styles from "../home.module.css";
 
 export function HomePage() {
   return (
-    <main className="relative isolate min-h-screen overflow-x-hidden bg-[#0b0b0a] text-[#e9e3c7]">
-      <AmbientAudio />
-      <ElasticScroll />
+    <main className={styles.world}>
+      <a className={styles.skipLink} href="#main-content">
+        Ir para o conteúdo
+      </a>
 
-      <div className="pointer-events-none fixed inset-0 z-0">
-        <StarFieldBackground />
+      <div className={styles.scene} aria-hidden="true">
+        <WorldSceneClient />
       </div>
+      <div className={styles.atmosphere} aria-hidden="true" />
+      <div className={styles.grain} aria-hidden="true" />
 
-      <HeroSection />
-      <PortfolioSection />
+      <SiteHeader />
+      <AmbientAudio />
+
+      <div id="main-content">
+        <HeroSection />
+        <PortfolioSection />
+      </div>
     </main>
   );
 }

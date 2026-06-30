@@ -5,7 +5,9 @@ html {
 }
 
 :root {
-  --bg: #0b0b0a;
+  --background: #0d0d0b;
+  --foreground: #e8e3cf;
+  --bg: var(--background);
   --surface: #151511;
   --panel: #d8d2b0;
   --panel-dark: #3d3a2f;
@@ -22,15 +24,13 @@ html {
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
+
+* { box-sizing: border-box; }
+::selection { background: #e8e3cf; color: #0d0d0b; }
+a { color: inherit; text-decoration: none; }
+button, a { -webkit-tap-highlight-color: transparent; }

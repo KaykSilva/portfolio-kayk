@@ -8,7 +8,7 @@ import type { Group, Object3D } from "three";
 const MODEL_URL = "/models/blackbox_of_nier_automata.glb";
 
 type BlackBoxProps = {
-  onBloomObjectsReady: (objects: Object3D[]) => void;
+  onBloomObjectsReady?: (objects: Object3D[]) => void;
 };
 
 export function BlackBox({ onBloomObjectsReady }: BlackBoxProps) {
@@ -25,6 +25,8 @@ export function BlackBox({ onBloomObjectsReady }: BlackBoxProps) {
   }, [scene]);
 
   useEffect(() => {
+    if (!onBloomObjectsReady) return;
+
     onBloomObjectsReady(bloomObjects);
 
     return () => onBloomObjectsReady([]);

@@ -1,50 +1,87 @@
-import Link from "next/link";
-import { SceneClient } from "./scene/SceneClient";
 import styles from "../home.module.css";
 
-const NAVIGATION_LINKS = [
-  { href: "/projects", label: "Ver projetos", accent: true },
-  { href: "/career", label: "Minha jornada", accent: false },
+const CHAPTERS = [
+  {
+    number: "01",
+    title: "Projetos",
+    text: "Produtos digitais tratados como artefatos: contexto, decisões, arquitetura e resultado.",
+    href: "#projects",
+    status: "Arquivo em construção",
+  },
+  {
+    number: "02",
+    title: "Jornada",
+    text: "Os sistemas, encontros e aprendizados que formaram minha maneira de construir.",
+    href: "#experience",
+    status: "Registro em construção",
+  },
+  {
+    number: "03",
+    title: "Laboratório",
+    text: "Experimentos com WebGL, interfaces, inteligência artificial e novas formas de interação.",
+    href: "#lab",
+    status: "Sinal em construção",
+  },
 ] as const;
 
 export function PortfolioSection() {
   return (
-    <section
-      data-scroll-section
-      className="relative z-10 grid min-h-screen grid-cols-1 lg:grid-cols-2"
-    >
-      <div className="flex flex-col justify-center p-8 lg:p-20">
-        <p className="mb-4 text-sm tracking-[0.4em] text-[#9b967f]">
-          WEB DEVELOPER // SYSTEM ONLINE
-        </p>
+    <>
+      <section id="manifesto" className={styles.manifesto} aria-labelledby="manifesto-title">
+        <div className={styles.sectionLabel}>
+          <span>002</span>
+          <span>Manifesto</span>
+        </div>
+        <div className={styles.manifestoBody}>
+          <p className={styles.eyebrow}>Entre lógica e atmosfera</p>
+          <h2 id="manifesto-title">
+            Código preciso.
+            <br />
+            Experiências <em>humanas.</em>
+          </h2>
+          <div className={styles.manifestoCopy}>
+            <p>
+              Acredito em tecnologia que não pede atenção — ela a conquista.
+              Crio interfaces onde performance, clareza e expressão visual
+              trabalham como um único sistema.
+            </p>
+            <p>
+              Cada projeto é uma investigação: entender o problema, remover o
+              ruído e encontrar a forma mais honesta de dar vida à ideia.
+            </p>
+          </div>
+        </div>
+      </section>
 
-        <h2 className="text-5xl font-bold uppercase leading-tight">
-          Portfólio interativo
-          <br />
-          com experiências reais
-        </h2>
+      <section id="projects" className={styles.chapters} aria-labelledby="chapters-title">
+        <div className={styles.sectionLabel}>
+          <span>003</span>
+          <span>Índice</span>
+        </div>
+        <div className={styles.chapterContent}>
+          <p className={styles.eyebrow}>Registros disponíveis</p>
+          <h2 id="chapters-title" className={styles.visuallyHidden}>Seções do portfólio</h2>
+          <div className={styles.chapterList}>
+            {CHAPTERS.map((chapter) => (
+              <a key={chapter.number} href={chapter.href} className={styles.chapter}>
+                <span className={styles.chapterNumber}>{chapter.number}</span>
+                <span className={styles.chapterMain}>
+                  <strong>{chapter.title}</strong>
+                  <span>{chapter.text}</span>
+                </span>
+                <span className={styles.chapterStatus}>{chapter.status}</span>
+                <span className={styles.chapterArrow} aria-hidden="true">↗</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        <p className="mt-6 max-w-xl text-[#c9c1a0]">
-          Projetos, carreira e trajetória pessoal apresentados como uma
-          interface de sistema inspirada em jogos sci-fi minimalistas.
-        </p>
-
-        <nav aria-label="Navegação do portfólio" className="mt-8 flex gap-4">
-          {NAVIGATION_LINKS.map(({ href, label, accent }) => (
-            <Link
-              key={href}
-              className={`border px-6 py-3 ${accent ? "border-[#d8d2b0]" : "border-[#5d5848]"}`}
-              href={href}
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
-      </div>
-
-      <div className={`${styles.sceneEdgeFade} h-[500px] lg:h-screen`}>
-        <SceneClient />
-      </div>
-    </section>
+      <footer className={styles.footer}>
+        <p>Kayk — Creative Developer</p>
+        <p>Araioses · Brasil · 2026</p>
+        <a href="mailto:contato@kayk.dev">Iniciar conversa ↗</a>
+      </footer>
+    </>
   );
 }
