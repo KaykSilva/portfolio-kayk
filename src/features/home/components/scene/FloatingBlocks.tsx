@@ -4,11 +4,11 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import type { Group } from "three";
 
-const blocks = [
-  { position: [-2.4, 1.4, -1.2], scale: 0.35 },
-  { position: [2.2, 1.1, -0.8], scale: 0.5 },
-  { position: [-1.9, -1.5, -0.5], scale: 0.45 },
-  { position: [2.5, -1.3, -1.6], scale: 0.3 },
+const BLOCKS = [
+  { position: [-1.45, 1.1, -0.6], scale: 0.35 },
+  { position: [1.4, 0.95, -0.65], scale: 0.45 },
+  { position: [-1.35, -0.9, -0.7], scale: 0.4 },
+  { position: [1.35, -0.85, -0.75], scale: 0.3 },
 ] as const;
 
 export function FloatingBlocks() {
@@ -23,7 +23,7 @@ export function FloatingBlocks() {
 
   return (
     <group ref={group}>
-      {blocks.map(({ position, scale }, index) => (
+      {BLOCKS.map(({ position, scale }, index) => (
         <mesh
           key={index}
           position={position}

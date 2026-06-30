@@ -1,0 +1,132 @@
+.sceneEdgeFade {
+  mask-image: radial-gradient(ellipse 88% 82% at center, black 58%, transparent 100%);
+}
+
+.helloWord {
+  perspective: 600px;
+}
+
+.glitchWriting {
+  position: relative;
+  display: inline-block;
+  min-width: 5.6ch;
+  text-align: left;
+  text-shadow: 0 0 18px rgb(233 227 199 / 22%), 0.025em 0 #9b967f,
+    -0.025em 0 #fffbea;
+}
+
+.glitchWriting::before,
+.glitchWriting::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.42;
+}
+
+.glitchWriting::before {
+  color: #fffbea;
+  clip-path: inset(12% 0 58% 0);
+  transform: translateX(-0.045em);
+  animation: glitch-slice-a 180ms steps(2, end) infinite;
+}
+
+.glitchWriting::after {
+  color: #9b967f;
+  clip-path: inset(62% 0 8% 0);
+  transform: translateX(0.045em);
+  animation: glitch-slice-b 240ms steps(2, end) infinite;
+}
+
+.glitchWriting.isComplete::before,
+.glitchWriting.isComplete::after {
+  opacity: 0.16;
+  animation-duration: 2.8s;
+}
+
+.glitchCaret {
+  display: inline-block;
+  width: 0.07em;
+  height: 0.82em;
+  margin-left: 0.08em;
+  background: #fffbea;
+  box-shadow: 0 0 12px rgb(255 251 234 / 80%);
+  animation: glitch-caret-blink 550ms steps(1, end) infinite;
+}
+
+.introCubeTrails {
+  --cube-progress: 0;
+  --cube-travel: 0px;
+
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: visible;
+}
+
+.introCubePath {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  width: 1px;
+  height: 82vh;
+  opacity: 0;
+  transform-origin: top center;
+  animation: cube-path-enter 600ms ease-out 900ms forwards;
+}
+
+.introCubePath:nth-child(1) { left: 44%; transform: rotate(2deg); }
+.introCubePath:nth-child(2) { left: 50%; animation-delay: 1050ms; }
+.introCubePath:nth-child(3) { left: 56%; transform: rotate(-2deg); animation-delay: 1200ms; }
+
+.introCubeLine {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, rgb(233 227 199 / 8%), rgb(255 251 234 / 80%) 75%, transparent);
+  box-shadow: 0 0 8px rgb(233 227 199 / 45%);
+  transform: scaleY(var(--cube-progress));
+  transform-origin: top;
+}
+
+.introScrollCube {
+  position: absolute;
+  top: -8px;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #fffbea;
+  background: rgb(233 227 199 / 18%);
+  box-shadow: 0 0 8px #fffbea, 0 0 22px rgb(233 227 199 / 75%);
+  transform: translate3d(-50%, var(--cube-travel), 0) rotate(45deg);
+  will-change: transform;
+}
+
+.introScrollCube::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgb(255 251 234 / 65%);
+}
+
+@keyframes glitch-slice-a { 50% { transform: translateX(0.055em); } }
+@keyframes glitch-slice-b { 50% { transform: translateX(-0.055em); } }
+@keyframes glitch-caret-blink { 50% { opacity: 0; } }
+@keyframes cube-path-enter { to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .introCubePath {
+    opacity: 1;
+    filter: none;
+    animation: none;
+    transform: none;
+  }
+
+  .glitchWriting::before,
+  .glitchWriting::after,
+  .glitchCaret {
+    animation: none;
+  }
+}

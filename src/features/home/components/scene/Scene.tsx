@@ -1,9 +1,9 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { Suspense } from "react";
 import { FloatingBlocks } from "./FloatingBlocks";
-import { StarField } from "./StarField";
 import { BlackBox } from "./BlackBox";
 
 export function Scene() {
@@ -12,9 +12,10 @@ export function Scene() {
       <ambientLight intensity={0.4} />
       <directionalLight position={[3, 4, 5]} intensity={1.5} />
 
-      <BlackBox />
+      <Suspense fallback={null}>
+        <BlackBox />
+      </Suspense>
       <FloatingBlocks />
-      <StarField  />
 
       <OrbitControls enableZoom={false} />
     </Canvas>

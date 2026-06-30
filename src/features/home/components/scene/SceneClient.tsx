@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 
 const Scene = dynamic(
   () => import("./Scene").then((mod) => mod.Scene),
-  { ssr: false }
+  { ssr: false },
 );
 
 export function SceneClient() {
