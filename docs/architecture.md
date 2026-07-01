@@ -15,6 +15,11 @@ src/
 │       ├── data/        # Fonte tipada dos projetos e presets de cena
 │       ├── projects.module.css
 │       └── index.ts
+│   └── journey/
+│       ├── components/  # Documento acessível, navegação e cena de memórias
+│       ├── data/        # Narrativa tipada e presets ambientais
+│       ├── journey.module.css
+│       └── index.ts
 ├── shared/              # Componentes e utilitários usados por várias features
 └── lib/                 # Integrações e código independente de interface
 ```
@@ -35,3 +40,10 @@ src/
 - O estado de seleção fica restrito a `ProjectArchive`; índice e detalhes recebem dados por props.
 - A cena WebGL recebe somente `scenePreset` e é carregada dinamicamente no cliente.
 - `SiteHeader` e `AmbientAudio` vivem em `shared` porque são usados por mais de uma rota.
+
+## Journey
+
+- `features/journey/data/memories.ts` é a fonte única de conteúdo e presets ambientais.
+- O painel e a navegação permanecem no DOM; a cena 3D é uma camada progressiva e opcional.
+- Os monólitos compartilham geometria e material por meio de `InstancedMesh`.
+- Seleção, câmera, iluminação e densidade de partículas derivam do mesmo índice ativo.

@@ -12,8 +12,8 @@ const CHAPTERS = [
     number: "02",
     title: "Jornada",
     text: "Os sistemas, encontros e aprendizados que formaram minha maneira de construir.",
-    href: "#experience",
-    status: "Registro em construção",
+    href: "/journey",
+    status: "Arquivo disponível",
   },
   {
     number: "03",
