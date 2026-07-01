@@ -1,4 +1,3 @@
-import { AmbientAudio } from "@/shared/components/AmbientAudio";
 import { SiteHeader } from "@/shared/components/SiteHeader";
 import { projects } from "../data/projects";
 import { ProjectArchive } from "./ProjectArchive";
@@ -13,11 +12,10 @@ export function ProjectsPage() {
         links={[
           { href: "/#manifesto", label: "Manifesto" },
           { href: "/projects", label: "Projetos" },
-          { href: "mailto:contato@kayk.dev", label: "Contato" },
+          { href: "/contact", label: "Contato" },
         ]}
       />
       <ProjectArchive projects={projects} />
-      <AmbientAudio />
       <div className={styles.grain} aria-hidden="true" />
     </main>
   );

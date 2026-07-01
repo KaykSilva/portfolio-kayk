@@ -20,6 +20,11 @@ src/
 │       ├── data/        # Narrativa tipada e presets ambientais
 │       ├── journey.module.css
 │       └── index.ts
+│   └── contact/
+│       ├── components/  # Página e lista semântica de canais
+│       ├── data/        # Fonte tipada dos meios de contato
+│       ├── contact.module.css
+│       └── index.ts
 ├── shared/              # Componentes e utilitários usados por várias features
 └── lib/                 # Integrações e código independente de interface
 ```
@@ -40,6 +45,7 @@ src/
 - O estado de seleção fica restrito a `ProjectArchive`; índice e detalhes recebem dados por props.
 - A cena WebGL recebe somente `scenePreset` e é carregada dinamicamente no cliente.
 - `SiteHeader` e `AmbientAudio` vivem em `shared` porque são usados por mais de uma rota.
+- `AmbientAudio` é montado uma única vez no root layout para persistir entre navegações sem sobrepor players.
 
 ## Journey
 
@@ -47,3 +53,9 @@ src/
 - O painel e a navegação permanecem no DOM; a cena 3D é uma camada progressiva e opcional.
 - Os monólitos compartilham geometria e material por meio de `InstancedMesh`.
 - Seleção, câmera, iluminação e densidade de partículas derivam do mesmo índice ativo.
+
+## Contact
+
+- `features/contact/data/channels.ts` centraliza endereços e metadados dos canais.
+- A página permanece um Server Component e não adiciona JavaScript além dos componentes compartilhados.
+- O ambiente de transmissão é construído em CSS para preservar baixo custo de renderização.

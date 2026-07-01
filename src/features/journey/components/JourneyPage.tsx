@@ -1,4 +1,3 @@
-import { AmbientAudio } from "@/shared/components/AmbientAudio";
 import { SiteHeader } from "@/shared/components/SiteHeader";
 import { memories } from "../data/memories";
 import { JourneyExperience } from "./JourneyExperience";
@@ -16,10 +15,10 @@ export function JourneyPage() {
           { href: "/#manifesto", label: "Manifesto" },
           { href: "/journey", label: "Jornada" },
           { href: "/projects", label: "Projetos" },
+          { href: "/contact", label: "Contato" },
         ]}
       />
       <JourneyExperience memories={memories} />
-      <AmbientAudio />
       <div className={styles.grain} aria-hidden="true" />
     </main>
   );

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "../home.module.css";
 
 const CHAPTERS = [
@@ -17,10 +18,10 @@ const CHAPTERS = [
   },
   {
     number: "03",
-    title: "Laboratório",
-    text: "Experimentos com WebGL, interfaces, inteligência artificial e novas formas de interação.",
-    href: "#lab",
-    status: "Sinal em construção",
+    title: "Contato",
+    text: "Canais abertos para projetos, oportunidades, colaborações e ideias que ainda precisam ganhar forma.",
+    href: "/contact",
+    status: "Transmissão disponível",
   },
 ] as const;
 
@@ -80,7 +81,7 @@ export function PortfolioSection() {
       <footer className={styles.footer}>
         <p>Kayk — Creative Developer</p>
         <p>Araioses · Brasil · 2026</p>
-        <a href="mailto:contato@kayk.dev">Iniciar conversa ↗</a>
+        <Link href="/contact">Iniciar conversa ↗</Link>
       </footer>
     </>
   );

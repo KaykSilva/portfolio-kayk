@@ -1,4 +1,3 @@
-import { AmbientAudio } from "@/shared/components/AmbientAudio";
 import { SiteHeader } from "@/shared/components/SiteHeader";
 import { HeroSection } from "./HeroSection";
 import { HomeLoader } from "./HomeLoader";
@@ -25,11 +24,9 @@ export function HomePage() {
         links={[
           { href: "#manifesto", label: "Manifesto" },
           { href: "/projects", label: "Projetos" },
-          { href: "mailto:contato@kayk.dev", label: "Contato" },
+          { href: "/contact", label: "Contato" },
         ]}
       />
-      <AmbientAudio />
-
       <div id="main-content">
         <HeroSection />
         <PortfolioSection />
