@@ -15,6 +15,7 @@ import {
   type SpotLight,
 } from "three";
 import type { JourneyMemory } from "../../data/memories";
+import { useMobileExperience } from "@/shared/hooks/useMobileExperience";
 
 const MONOLITH_SPACING = 7.4;
 const MAX_PARTICLES = 960;
@@ -143,7 +144,7 @@ function HoverFragments({ hoveredIndex }: { hoveredIndex: number | null }) {
   );
 }
 
-function JourneyParticles({ memory }: { memory: JourneyMemory }) {
+function JourneyParticles({ memory, mobile }: { memory: JourneyMemory; mobile: boolean }) {
   const points = useRef<Points>(null);
   const material = useRef<PointsMaterial>(null);
   const positions = useMemo(() => {
@@ -158,8 +159,11 @@ function JourneyParticles({ memory }: { memory: JourneyMemory }) {
   }, []);
 
   useEffect(() => {
-    points.current?.geometry.setDrawRange(0, memory.scenePreset.particleCount);
-  }, [memory]);
+    points.current?.geometry.setDrawRange(
+      0,
+      mobile ? Math.min(memory.scenePreset.particleCount, 360) : memory.scenePreset.particleCount,
+    );
+  }, [memory, mobile]);
 
   useFrame(({ clock }, delta) => {
     if (!points.current || !material.current) return;
@@ -216,7 +220,7 @@ function MemoryLight({ memory, activeIndex }: { memory: JourneyMemory; activeInd
   return <spotLight ref={light} position={[0, 7, 2]} angle={0.48} penumbra={0.86} distance={20} intensity={5} />;
 }
 
-function SceneContent({ activeIndex, memories, onSelect }: SceneContentProps) {
+function SceneContent({ activeIndex, memories, mobile, onSelect }: SceneContentProps & { mobile: boolean }) {
   const activeMemory = memories[activeIndex];
 
   return (
@@ -224,7 +228,7 @@ function SceneContent({ activeIndex, memories, onSelect }: SceneContentProps) {
       <ambientLight intensity={0.18 + activeIndex * 0.025} color="#8f8a78" />
       <MemoryLight memory={activeMemory} activeIndex={activeIndex} />
       <JourneyMonoliths activeIndex={activeIndex} memories={memories} onSelect={onSelect} />
-      <JourneyParticles memory={activeMemory} />
+      <JourneyParticles memory={activeMemory} mobile={mobile} />
       <CameraJourney activeIndex={activeIndex} />
       <mesh position={[0, -3, -24]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[32, 90]} />
@@ -235,17 +239,19 @@ function SceneContent({ activeIndex, memories, onSelect }: SceneContentProps) {
 }
 
 export function JourneyScene(props: SceneContentProps) {
+  const mobile = useMobileExperience();
+
   return (
     <Canvas
       camera={{ position: [0, 3.6, 15.5], fov: 48, near: 0.1, far: 100 }}
-      dpr={[1, 1.35]}
+      dpr={mobile ? 1 : [1, 1.35]}
       gl={{ antialias: false, powerPreference: "high-performance" }}
       onCreated={({ gl, scene }) => {
         gl.setClearColor(new Color("#0d0d0b"));
         scene.fog = new FogExp2("#151511", 0.042);
       }}
     >
-      <SceneContent {...props} />
+      <SceneContent {...props} mobile={mobile} />
     </Canvas>
   );
 }

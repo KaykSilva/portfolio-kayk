@@ -15,16 +15,19 @@ import {
 } from "three";
 import { Pod } from "./Pod";
 import { BlackBox } from "./BlackBox";
+import { useMobileExperience } from "@/shared/hooks/useMobileExperience";
 
-const TOWERS = 42;
-const PARTICLES = 1100;
+const DESKTOP_TOWERS = 42;
+const DESKTOP_PARTICLES = 1100;
+const MOBILE_TOWERS = 20;
+const MOBILE_PARTICLES = 460;
 
-function Ruins() {
+function Ruins({ count }: { count: number }) {
   const mesh = useRef<InstancedMesh>(null);
   const dummy = useMemo(() => new Object3D(), []);
   const transforms = useMemo(
     () =>
-      Array.from({ length: TOWERS }, (_, index) => {
+      Array.from({ length: count }, (_, index) => {
         const side = index % 2 === 0 ? -1 : 1;
         const lane = Math.floor(index / 2);
         const seed = (index * 7.31) % 1;
@@ -34,7 +37,7 @@ function Ruins() {
           rotation: (seed - 0.5) * 0.12,
         };
       }),
-    [],
+    [count],
   );
 
   useFrame(({ clock }) => {
@@ -50,7 +53,7 @@ function Ruins() {
   });
 
   return (
-    <instancedMesh ref={mesh} args={[undefined, undefined, TOWERS]} frustumCulled>
+    <instancedMesh ref={mesh} args={[undefined, undefined, count]} frustumCulled>
       <boxGeometry />
       <meshStandardMaterial
         color="#d8d5d0"
@@ -63,22 +66,22 @@ function Ruins() {
   );
 }
 
-function Dust() {
+function Dust({ count }: { count: number }) {
   const points = useRef<Points>(null);
   const positionAttribute = useRef<BufferAttribute>(null);
   const material = useRef<PointsMaterial>(null);
   const previousScroll = useRef(0);
   const travelSpeed = useRef(0);
   const positions = useMemo(() => {
-    const values = new Float32Array(PARTICLES * 3);
-    for (let index = 0; index < PARTICLES; index += 1) {
+    const values = new Float32Array(count * 3);
+    for (let index = 0; index < count; index += 1) {
       const offset = index * 3;
       values[offset] = ((index * 13.37) % 1 - 0.5) * 28;
       values[offset + 1] = ((index * 7.91) % 1 - 0.5) * 14;
       values[offset + 2] = -((index * 3.73) % 1) * 50;
     }
     return values;
-  }, []);
+  }, [count]);
 
   useFrame(({ clock }, delta) => {
     if (!points.current || !positionAttribute.current || !material.current) return;
@@ -185,21 +188,21 @@ function ScrollPod() {
   );
 }
 
-function World() {
+function World({ mobile }: { mobile: boolean }) {
   const world = useRef<Group>(null);
 
   useFrame((state, delta) => {
     if (!world.current) return;
     const scroll = window.scrollY / Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
     world.current.position.z = MathUtils.damp(world.current.position.z, scroll * 20, 1.1, delta);
-    world.current.rotation.y = MathUtils.damp(world.current.rotation.y, state.pointer.x * 0.025, 2, delta);
-    world.current.rotation.x = MathUtils.damp(world.current.rotation.x, -state.pointer.y * 0.012, 2, delta);
+    world.current.rotation.y = MathUtils.damp(world.current.rotation.y, mobile ? 0 : state.pointer.x * 0.025, 2, delta);
+    world.current.rotation.x = MathUtils.damp(world.current.rotation.x, mobile ? 0 : -state.pointer.y * 0.012, 2, delta);
   });
 
   return (
     <group ref={world}>
-      <Ruins />
-      <Dust />
+      <Ruins count={mobile ? MOBILE_TOWERS : DESKTOP_TOWERS} />
+      <Dust count={mobile ? MOBILE_PARTICLES : DESKTOP_PARTICLES} />
       <Suspense fallback={null}>
         <group position={[3.8, 0.35, -3]} scale={1.25}>
           <BlackBox />
@@ -215,10 +218,12 @@ function World() {
 }
 
 export function WorldScene() {
+  const mobile = useMobileExperience();
+
   return (
     <Canvas
       camera={{ position: [0, 1.2, 8], fov: 52, near: 0.1, far: 90 }}
-      dpr={[1, 1.35]}
+      dpr={mobile ? 1 : [1, 1.35]}
       gl={{ alpha: false, antialias: false, powerPreference: "high-performance" }}
       onCreated={({ gl, scene }) => {
         gl.setClearColor(new Color("#0d0d0b"));
@@ -227,7 +232,7 @@ export function WorldScene() {
     >
       <ambientLight intensity={0.7} color="#a9a48f" />
       <directionalLight position={[-7, 10, 4]} intensity={2.1} color="#eee8d2" />
-      <World />
+      <World mobile={mobile} />
     </Canvas>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import styles from "./ambient-audio.module.css";
 
 const AUDIO_SOURCE = "/audio/ambient.mp3";
 const AMBIENT_VOLUME = 0.28;
@@ -60,17 +61,17 @@ export function AmbientAudio() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className={styles.control}>
       <audio ref={audio} autoPlay loop preload="auto" src={AUDIO_SOURCE} />
       <button
         type="button"
         aria-label={playing ? "Pausar paisagem sonora" : "Ativar paisagem sonora"}
         aria-pressed={playing}
-        className="flex h-9 items-center gap-3 border border-white/15 bg-[#0d0d0b]/80 px-3 font-mono text-[9px] uppercase tracking-[0.18em] text-[#d8d2b0] backdrop-blur-sm transition-colors hover:border-white/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d8d2b0]"
+        className={styles.button}
         onClick={togglePlayback}
       >
         <span aria-hidden="true">{playing ? "Ⅱ" : "▷"}</span>
-        <span>{playing ? "Som ativo" : "Ambiente"}</span>
+        <span className={styles.label}>{playing ? "Som ativo" : "Ambiente"}</span>
       </button>
     </div>
   );

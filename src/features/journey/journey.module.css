@@ -73,18 +73,22 @@
   .experience { min-height: 100svh; padding-top: 4.5rem; }
   .page::before { background: linear-gradient(rgb(13 13 11 / 28%), rgb(13 13 11 / 86%) 60%); }
   .scene { opacity: .62; }
-  .introduction { position: relative; top: auto; left: auto; width: auto; min-height: 62svh; padding: 7rem 1.25rem 6rem; transform: none; }
-  .introduction h1 { font-size: clamp(3.6rem, 18vw, 5.8rem); }
+  .introduction { position: relative; top: auto; left: auto; width: auto; min-height: 62svh; padding: calc(7rem + env(safe-area-inset-top)) max(1.25rem, env(safe-area-inset-right)) 6rem max(1.25rem, env(safe-area-inset-left)); transform: none; }
+  .introduction h1 { font-size: clamp(3.15rem, 15vw, 5rem); }
   .introduction h1 em { margin-left: 0; }
   .introCopy { margin-left: 0; }
-  .memoryPanel { position: relative; top: auto; width: auto; height: auto; min-height: 100svh; padding: 3.5rem 1.25rem 8rem; border: 0; border-top: 1px solid var(--line); background: rgb(13 13 11 / 92%); backdrop-filter: blur(10px); }
+  .memoryPanel { position: relative; top: auto; width: auto; height: auto; min-height: 100svh; padding: 3.5rem 1.25rem 8rem; scroll-margin-top: calc(4.5rem + env(safe-area-inset-top)); border: 0; border-top: 1px solid var(--line); background: rgb(13 13 11 / 94%); backdrop-filter: none; }
   .memoryHeader h2 { font-size: clamp(3.2rem, 16vw, 5rem); }
   .memoryDocument { grid-template-columns: 1fr; }
   .memoryDocument section, .memoryDocument section:nth-child(even) { min-height: auto; padding: 2.4rem 0; border-left: 0; }
-  .memoryNavigation { left: 50%; bottom: 1rem; max-width: calc(100vw - 2rem); padding: .65rem; background: rgb(13 13 11 / 90%); transform: translateX(-50%); backdrop-filter: blur(8px); }
-  .memoryNavigation ol { gap: .45rem; }
-  .memoryNavigation ol button { width: 1rem; }
+  .memoryNavigation { left: 50%; bottom: calc(.75rem + env(safe-area-inset-bottom)); width: calc(100vw - 1.5rem); max-width: 30rem; gap: .35rem; padding: .45rem; background: rgb(13 13 11 / 94%); transform: translateX(-50%); backdrop-filter: none; }
+  .memoryNavigation > button { flex: 0 0 2.75rem; width: 2.75rem; }
+  .memoryNavigation ol { flex: 1; gap: .15rem; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x mandatory; }
+  .memoryNavigation ol li { flex: 0 0 auto; scroll-snap-align: center; }
+  .memoryNavigation ol button { place-content: center; width: 2.75rem; height: 2.75rem; }
+  .memoryNavigation ol i { width: 1rem; }
   .memoryNavigation ol span { display: none; }
+  .grain { opacity: .022; }
 }
 
 @media (prefers-reduced-motion: reduce) {

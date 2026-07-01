@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import type { Project } from "../data/projects";
 import styles from "../projects.module.css";
 
@@ -8,6 +11,13 @@ type ProjectIndexProps = {
 };
 
 export function ProjectIndex({ onSelect, projects, selectedId }: ProjectIndexProps) {
+  const selectedTrigger = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!window.matchMedia("(max-width: 760px)").matches) return;
+    selectedTrigger.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }, [selectedId]);
+
   return (
     <aside className={styles.indexPanel} aria-labelledby="archive-index-title">
       <div className={styles.panelHeading}>
@@ -21,6 +31,7 @@ export function ProjectIndex({ onSelect, projects, selectedId }: ProjectIndexPro
             <li key={project.id}>
               <button
                 type="button"
+                ref={selected ? selectedTrigger : undefined}
                 className={styles.projectTrigger}
                 aria-pressed={selected}
                 onClick={() => onSelect(project.id)}

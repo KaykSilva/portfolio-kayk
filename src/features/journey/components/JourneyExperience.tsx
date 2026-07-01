@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { JourneyMemory } from "../data/memories";
 import { JourneySceneClient } from "./scene/JourneySceneClient";
 import { MemoryNavigation } from "./MemoryNavigation";
@@ -13,11 +13,17 @@ type JourneyExperienceProps = {
 
 export function JourneyExperience({ memories }: JourneyExperienceProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const touchStart = useRef({ x: 0, y: 0 });
   const activeMemory = memories[activeIndex];
 
   const selectMemory = useCallback(
     (index: number) => {
       setActiveIndex(Math.min(Math.max(index, 0), memories.length - 1));
+      if (window.matchMedia("(max-width: 760px)").matches) {
+        window.requestAnimationFrame(() => {
+          document.getElementById("memory-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
     },
     [memories.length],
   );
@@ -26,6 +32,18 @@ export function JourneyExperience({ memories }: JourneyExperienceProps) {
     <section
       aria-label="Arquivo de memórias"
       className={styles.experience}
+      onTouchStart={(event) => {
+        const touch = event.changedTouches[0];
+        touchStart.current = { x: touch.clientX, y: touch.clientY };
+      }}
+      onTouchEnd={(event) => {
+        const touch = event.changedTouches[0];
+        const deltaX = touchStart.current.x - touch.clientX;
+        const deltaY = touchStart.current.y - touch.clientY;
+        if (Math.abs(deltaX) > 60 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+          selectMemory(activeIndex + (deltaX > 0 ? 1 : -1));
+        }
+      }}
       onKeyDown={(event) => {
         if (event.key === "ArrowRight" || event.key === "ArrowDown") {
           event.preventDefault();

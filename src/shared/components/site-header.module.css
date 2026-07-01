@@ -35,8 +35,26 @@
 .header nav a:hover, .header nav a[aria-current="page"] { color: #e8e3cf; }
 .header nav span { color: rgb(232 227 207 / 38%); font-size: .52rem; }
 .header a:focus-visible { outline: 1px solid #e8e3cf; outline-offset: .5rem; }
+.menuButton, .header .mobileNavigation { display: none; }
 
 @media (max-width: 760px) {
-  .header { height: 4.5rem; }
-  .header nav a:not(:last-child) { display: none; }
+  .header { height: calc(4.5rem + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top); background: rgb(13 13 11 / 88%); }
+  .header > nav:first-of-type { display: none; }
+  .menuButton { position: relative; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 1px solid rgb(232 227 207 / 24%); background: rgb(13 13 11 / 42%); color: #e8e3cf; }
+  .menuButton span { position: absolute; width: 1rem; height: 1px; background: currentColor; transition: transform .3s ease; }
+  .menuButton span:first-child { transform: translateY(-.2rem); }
+  .menuButton span:last-child { transform: translateY(.2rem); }
+  .menuButton[aria-expanded="true"] span:first-child { transform: rotate(45deg); }
+  .menuButton[aria-expanded="true"] span:last-child { transform: rotate(-45deg); }
+  .header .mobileNavigation { position: fixed; display: grid; gap: 0; inset: calc(4.5rem + env(safe-area-inset-top)) 0 auto; padding: 1rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom)); border-bottom: 1px solid rgb(232 227 207 / 18%); background: rgb(13 13 11 / 96%); visibility: hidden; opacity: 0; transform: translateY(-.75rem); pointer-events: none; transition: opacity .3s ease, transform .3s ease, visibility .3s; }
+  .header .mobileNavigationOpen { visibility: visible; opacity: 1; transform: none; pointer-events: auto; }
+  .header .mobileNavigation a { display: grid; grid-template-columns: 2rem 1fr auto; gap: 0; align-items: center; min-height: 3.5rem; border-bottom: 1px solid rgb(232 227 207 / 12%); color: #999480; }
+  .header .mobileNavigation a[aria-current="page"] { color: #e8e3cf; }
+  .header .mobileNavigation a span { font: .52rem/1 var(--font-geist-mono); opacity: .5; }
+  .header .mobileNavigation a strong { font: 400 1.15rem/1 var(--font-geist-sans); text-transform: uppercase; }
+  .header .mobileNavigation a i { font-style: normal; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menuButton span, .mobileNavigation { transition: none; }
 }

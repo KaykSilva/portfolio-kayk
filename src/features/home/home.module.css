@@ -4,7 +4,7 @@
   --muted: #999480;
   --hairline: rgb(232 227 207 / 18%);
   position: relative;
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow: clip;
   background: var(--ink);
   color: var(--paper);
@@ -73,19 +73,21 @@
 @keyframes glitch { 0%, 96%, 100% { transform: translateX(0); } 97% { transform: translateX(.05em); } 98% { transform: translateX(-.04em); } }
 
 @media (max-width: 760px) {
-  .hero { padding-inline: 1.25rem; }
+  .hero { padding: calc(7rem + env(safe-area-inset-top)) max(1.25rem, env(safe-area-inset-right)) calc(5rem + env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left)); }
   .heroContent { width: 100%; }
-  .heroTitle { font-size: clamp(3.1rem, 16vw, 5.5rem); line-height: .88; }
+  .heroTitle { max-width: 100%; font-size: clamp(2.65rem, 13.5vw, 4.6rem); line-height: .9; }
   .heroTitleAccent { margin-left: 0; }
   .heroSummary { margin-left: 0; width: 92%; }
   .heroCoordinates { display: none; }
-  .manifesto, .chapters { grid-template-columns: 1fr; padding: 6rem 1.25rem; }
+  .atmosphere { background: radial-gradient(circle at 52% 38%, transparent 0 12%, rgb(13 13 11 / 36%) 52%, rgb(13 13 11 / 92%) 100%); }
+  .grain { opacity: .025; }
+  .manifesto, .chapters { grid-template-columns: 1fr; padding: 6rem max(1.25rem, env(safe-area-inset-right)) 6rem max(1.25rem, env(safe-area-inset-left)); }
   .sectionLabel { writing-mode: initial; margin-bottom: 4rem; }
   .manifestoCopy { grid-template-columns: 1fr; margin: 3rem 0 0; gap: 1.5rem; }
   .chapter { grid-template-columns: 2rem 1fr 1rem; gap: 1rem; padding-inline: 0; }
   .chapterMain { grid-template-columns: 1fr; gap: .6rem; }
   .chapterStatus { display: none; }
-  .footer { grid-template-columns: 1fr; }
+  .footer { grid-template-columns: 1fr; padding-bottom: calc(7rem + env(safe-area-inset-bottom)); }
   .footer p:nth-child(2) { display: none; }
 }
 

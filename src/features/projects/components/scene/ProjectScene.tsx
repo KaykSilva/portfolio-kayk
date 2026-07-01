@@ -15,6 +15,7 @@ import {
   type PointsMaterial,
 } from "three";
 import type { ProjectScenePreset } from "../../data/projects";
+import { useMobileExperience } from "@/shared/hooks/useMobileExperience";
 
 const ARTIFACT_COUNT = 24;
 const MAX_PARTICLES = 900;
@@ -97,7 +98,7 @@ function ArchiveArtifact({ preset }: { preset: ProjectScenePreset }) {
   );
 }
 
-function SignalField({ preset }: { preset: ProjectScenePreset }) {
+function SignalField({ mobile, preset }: { mobile: boolean; preset: ProjectScenePreset }) {
   const points = useRef<Points>(null);
   const material = useRef<PointsMaterial>(null);
   const geometry = useRef<BufferGeometry>(null);
@@ -115,7 +116,7 @@ function SignalField({ preset }: { preset: ProjectScenePreset }) {
 
   useFrame(({ clock }, delta) => {
     if (!points.current || !material.current || !geometry.current) return;
-    geometry.current.setDrawRange(0, preset.particleCount);
+    geometry.current.setDrawRange(0, mobile ? Math.min(preset.particleCount, 320) : preset.particleCount);
     material.current.color.lerp(targetColor, Math.min(delta * 1.2, 1));
     points.current.rotation.y = clock.elapsedTime * 0.008;
     points.current.position.z = Math.sin(clock.elapsedTime * 0.18) * 0.18;
@@ -131,10 +132,10 @@ function SignalField({ preset }: { preset: ProjectScenePreset }) {
   );
 }
 
-function CameraRig({ preset }: { preset: ProjectScenePreset }) {
+function CameraRig({ mobile, preset }: { mobile: boolean; preset: ProjectScenePreset }) {
   useFrame(({ camera, pointer }, delta) => {
-    camera.position.x = MathUtils.damp(camera.position.x, preset.cameraX + pointer.x * 0.12, 1.5, delta);
-    camera.position.y = MathUtils.damp(camera.position.y, 0.5 + preset.cameraY + pointer.y * 0.08, 1.5, delta);
+    camera.position.x = MathUtils.damp(camera.position.x, preset.cameraX + (mobile ? 0 : pointer.x * 0.12), 1.5, delta);
+    camera.position.y = MathUtils.damp(camera.position.y, 0.5 + preset.cameraY + (mobile ? 0 : pointer.y * 0.08), 1.5, delta);
     camera.position.z = MathUtils.damp(camera.position.z, 6.4, 1.2, delta);
     camera.lookAt(0, 0, -1.2);
   });
@@ -143,10 +144,12 @@ function CameraRig({ preset }: { preset: ProjectScenePreset }) {
 }
 
 export function ProjectScene({ preset }: { preset: ProjectScenePreset }) {
+  const mobile = useMobileExperience();
+
   return (
     <Canvas
       camera={{ position: [0, 1.4, 8.4], fov: 47, near: 0.1, far: 40 }}
-      dpr={[1, 1.35]}
+      dpr={mobile ? 1 : [1, 1.35]}
       gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
       onCreated={({ gl, scene }) => {
         gl.setClearColor("#0d0d0b", 0);
@@ -156,8 +159,8 @@ export function ProjectScene({ preset }: { preset: ProjectScenePreset }) {
       <ambientLight intensity={0.5} color="#b8b29c" />
       <directionalLight position={[4, 6, 5]} intensity={1.4} color="#eee8d2" />
       <ArchiveArtifact preset={preset} />
-      <SignalField preset={preset} />
-      <CameraRig preset={preset} />
+      <SignalField mobile={mobile} preset={preset} />
+      <CameraRig mobile={mobile} preset={preset} />
     </Canvas>
   );
 }

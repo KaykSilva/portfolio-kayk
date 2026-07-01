@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeferredValue, useMemo, useState, type CSSProperties } from "react";
+import { useCallback, useDeferredValue, useMemo, useRef, useState, type CSSProperties } from "react";
 import type { Project } from "../data/projects";
 import { ProjectDetails } from "./ProjectDetails";
 import { ProjectIndex } from "./ProjectIndex";
@@ -13,11 +13,22 @@ type ProjectArchiveProps = {
 
 export function ProjectArchive({ projects }: ProjectArchiveProps) {
   const [selectedId, setSelectedId] = useState(projects[0]?.id ?? "");
+  const detailsViewport = useRef<HTMLDivElement>(null);
   const selectedProject = useMemo(
     () => projects.find((project) => project.id === selectedId) ?? projects[0],
     [projects, selectedId],
   );
   const sceneProject = useDeferredValue(selectedProject);
+  const selectProject = useCallback((id: string) => {
+    setSelectedId(id);
+    window.requestAnimationFrame(() => {
+      if (window.matchMedia("(max-width: 760px)").matches) {
+        detailsViewport.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        detailsViewport.current?.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+  }, []);
 
   if (!selectedProject || !sceneProject) return null;
 
@@ -31,10 +42,10 @@ export function ProjectArchive({ projects }: ProjectArchiveProps) {
       <ProjectIndex
         projects={projects}
         selectedId={selectedProject.id}
-        onSelect={setSelectedId}
+        onSelect={selectProject}
       />
 
-      <div className={styles.detailsViewport} aria-live="polite" aria-atomic="true">
+      <div ref={detailsViewport} className={styles.detailsViewport} aria-live="polite" aria-atomic="true">
         <ProjectDetails key={selectedProject.id} project={selectedProject} />
       </div>
 
