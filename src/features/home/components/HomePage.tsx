@@ -1,6 +1,7 @@
 import { AmbientAudio } from "@/shared/components/AmbientAudio";
 import { SiteHeader } from "@/shared/components/SiteHeader";
 import { HeroSection } from "./HeroSection";
+import { HomeLoader } from "./HomeLoader";
 import { PortfolioSection } from "./PortfolioSection";
 import { WorldSceneClient } from "./scene/WorldSceneClient";
 import styles from "../home.module.css";
@@ -8,6 +9,7 @@ import styles from "../home.module.css";
 export function HomePage() {
   return (
     <main className={styles.world}>
+      <HomeLoader />
       <a className={styles.skipLink} href="#main-content">
         Ir para o conteúdo
       </a>
